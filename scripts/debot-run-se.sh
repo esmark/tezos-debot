@@ -91,6 +91,13 @@ appABI=$(< "${appArtifact}.abi.json" jq --compact-output | xxd -ps -c 20000)
 npx everdev contract run --address "${appAddr}" "${appArtifact}" setABI --input "dabi:$appABI" &>>build.log
 echo "✓"
 
+printf "Deploy Icon... "
+ICON_BYTES=$(base64 -w 0 icon.png)
+ICON=$(echo -n "data:image/png;base64,$ICON_BYTES" | xxd -ps -c 20000)
+npx tonos-cli --url http://127.0.0.1/ call "${appAddr}" setIcon "{\"icon\":\"$ICON\"}" --abi "${appArtifact}".abi.json &>>build.log
+echo "✓"
+
+
 echo "DeBot ${appAddr}"
 echo "npx tonos-cli debot --debug fetch ${appAddr}"
 npx tonos-cli debot fetch "${appAddr}"
