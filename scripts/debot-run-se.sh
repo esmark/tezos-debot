@@ -92,11 +92,10 @@ npx everdev contract run --address "${appAddr}" "${appArtifact}" setABI --input 
 echo "✓"
 
 printf "Deploy Icon... "
-ICON_BYTES=$(base64 -w 0 icon.png)
+ICON_BYTES=$(base64 -w 0 "${src}/icon.png")
 ICON=$(echo -n "data:image/png;base64,$ICON_BYTES" | xxd -ps -c 20000)
-npx tonos-cli --url http://127.0.0.1/ call "${appAddr}" setIcon "{\"icon\":\"$ICON\"}" --abi "${appArtifact}".abi.json &>>build.log
+npx everdev contract run --address "${appAddr}" "${appArtifact}" setIcon --input "icon:$ICON" &>>build.log
 echo "✓"
-
 
 echo "DeBot ${appAddr}"
 echo "npx tonos-cli debot --debug fetch ${appAddr}"

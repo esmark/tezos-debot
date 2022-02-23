@@ -2,14 +2,13 @@
 
 set -o errexit
 
-
 appName=${app:-Tezos}
 src=${src:-./debots}
 appArtifact=build/${appName}
 user=${user:-mykeys}
 
- npx everdev network default dev
- npx everdev signer default "${user}"
+npx everdev network default dev
+npx everdev signer default "${user}"
 
 appArtifact=build/${appName}
 network=$(npx everdev network list | grep Default | cut -d' ' -f1)
@@ -91,9 +90,9 @@ npx everdev contract run --address "${appAddr}" "${appArtifact}" setABI --input 
 echo "✓"
 
 printf "Deploy Icon... "
-ICON_BYTES=$(base64 -w 0 icon.png)
+ICON_BYTES=$(base64 -w 0 "${src}/icon.png")
 ICON=$(echo -n "data:image/png;base64,$ICON_BYTES" | xxd -ps -c 20000)
-npx tonos-cli --url net.ton.dev call "${appAddr}" setIcon "{\"icon\":\"$ICON\"}" --abi "${appArtifact}".abi.json &>>build.log
+npx everdev contract run --address "${appAddr}" "${appArtifact}" setIcon --input "icon:$ICON" &>>build.log
 echo "✓"
 
 echo "DeBot ${appAddr}"
