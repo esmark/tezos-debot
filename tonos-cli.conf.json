@@ -1,10 +1,10 @@
 {
   "config": {
-    "url": "net.ton.dev",
+    "url": "http://127.0.0.1/",
     "wc": 0,
     "addr": null,
-    "wallet": "0:beb64fcfd343d9270c8d0997c2a93d6f5e7a482eb31603a1d7286fcbc35574f9",
-    "pubkey": "0xcfcbc72d66536bbc2905acad0d0db0945be7cf27a69dee86bb42cca4cf63cc61",
+    "wallet": "0:c186b23480495674920e22517e6b569c4c8e6fdee3c1f4787443ce1032cbcad0",
+    "pubkey": "0x7835a25f0af16d92347fdc00e50c48c1317d12fec18b9b37eb5e4b5620829250",
     "abi_path": null,
     "keys_path": "secret.json",
     "retries": 5,
@@ -19,15 +19,16 @@
     "local_run": false,
     "async_call": false,
     "endpoints": [
-      "https://net1.ton.dev",
-      "https://net5.ton.dev"
+      "http://0.0.0.0:8080/",
+      "http://127.0.0.1:8080/",
+      "http://localhost:8080/"
     ]
   },
   "endpoints_map": {
     "http://127.0.0.1/": [
-      "http://0.0.0.0/",
-      "http://127.0.0.1/",
-      "http://localhost/"
+      "http://0.0.0.0:8080/",
+      "http://127.0.0.1:8080/",
+      "http://localhost:8080/"
     ],
     "main.ton.dev": [
       "https://main2.ton.dev",

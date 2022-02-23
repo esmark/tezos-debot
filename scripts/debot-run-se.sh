@@ -2,14 +2,14 @@
 
 set -o errexit
 
-# npx everdev network default se
-# npx everdev signer default mysurf
-
-user=${user:-mysurf}
-appName=${app:-Example}
-src=${src:-.}
-
+appName=${app:-Tezos}
+src=${src:-./debots}
 appArtifact=build/${appName}
+user=${user:-mykeys}
+
+npx everdev network default se
+npx everdev signer default "${user}"
+
 network=$(npx everdev network list | grep Default | cut -d' ' -f1)
 signer=$(npx everdev signer list | grep Default | cut -d' ' -f1)
 
@@ -56,13 +56,16 @@ echo "network: ${network} signer: ${signer} user: ${user}"
 if [ "${network}" == "se" ] && ! npx everdev se info | grep --quiet running; then
   npx everdev se reset
 fi
+
 configUrl="$(npx everdev network list | grep Default | cut -d' ' -f4 | cut -d',' -f1)"
 npx tonos-cli config --url "${configUrl}" > /dev/null 2>&1
+
 if [ "$(accountType "$(addressWallet "${user}")")" != "Active" ]; then
   printf "Create wallet for %s... " "${user}"
   printf '%s' "$(createWallet SurfMultisigWallet "${user}")"
   echo " ✓"
 fi
+
 npx everdev signer info "${user}" | jq -r .keys > secret.json
 npx tonos-cli config \
   --keys secret.json \
