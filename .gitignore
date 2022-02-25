@@ -1,4 +1,5 @@
 network
 secret.json
+.solc_imports
 *.log
 .idea
