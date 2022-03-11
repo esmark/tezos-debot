@@ -6,6 +6,7 @@ appName=${app:-Tezos}
 src=${src:-./debots}
 appArtifact=build/${appName}
 user=${user:-mykeys}
+tezos="tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9"
 
 npx everdev network default se
 npx everdev signer default "${user}"
@@ -95,6 +96,10 @@ printf "Deploy Icon... "
 ICON_BYTES=$(base64 -w 0 "${src}/icon.png")
 ICON=$(echo -n "data:image/png;base64,$ICON_BYTES" | xxd -ps -c 20000)
 npx everdev contract run --address "${appAddr}" "${appArtifact}" setIcon --input "icon:$ICON" &>>build.log
+echo "✓"
+
+printf "Deploy Default Tezos address ${tezos} ... "
+npx everdev contract run --address "${appAddr}" "${appArtifact}" setDefaultTezosAddress --input "value:$tezos" &>>build.log
 echo "✓"
 
 echo "DeBot ${appAddr}"

@@ -6,11 +6,11 @@ appName=${app:-Tezos}
 src=${src:-./debots}
 appArtifact=build/${appName}
 user=${user:-mykeys}
+tezos="tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9"
 
 npx everdev network default dev
 npx everdev signer default "${user}"
 
-appArtifact=build/${appName}
 network=$(npx everdev network list | grep Default | cut -d' ' -f1)
 signer=$(npx everdev signer list | grep Default | cut -d' ' -f1)
 
@@ -57,13 +57,16 @@ echo "network: ${network} signer: ${signer} user: ${user}"
 if [ "${network}" == "se" ] && ! npx everdev se info | grep --quiet running; then
   npx everdev se reset
 fi
+
 configUrl="$(npx everdev network list | grep Default | cut -d' ' -f4 | cut -d',' -f1)"
 npx tonos-cli config --url "${configUrl}" > /dev/null 2>&1
+
 if [ "$(accountType "$(addressWallet "${user}")")" != "Active" ]; then
   printf "Create wallet for %s... " "${user}"
   printf '%s' "$(createWallet SurfMultisigWallet "${user}")"
   echo " ✓"
 fi
+
 npx everdev signer info "${user}" | jq -r .keys > secret.json
 npx tonos-cli config \
   --keys secret.json \
@@ -93,6 +96,10 @@ printf "Deploy Icon... "
 ICON_BYTES=$(base64 -w 0 "${src}/icon.png")
 ICON=$(echo -n "data:image/png;base64,$ICON_BYTES" | xxd -ps -c 20000)
 npx everdev contract run --address "${appAddr}" "${appArtifact}" setIcon --input "icon:$ICON" &>>build.log
+echo "✓"
+
+printf "Deploy Default Tezos address ${tezos} ... "
+npx everdev contract run --address "${appAddr}" "${appArtifact}" setDefaultTezosAddress --input "value:$tezos" &>>build.log
 echo "✓"
 
 echo "DeBot ${appAddr}"
