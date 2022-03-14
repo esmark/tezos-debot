@@ -10,9 +10,10 @@ import "./interfaces/Network/Network.sol";
 import "./interfaces/QRCode/QRCode.sol";
 import "./interfaces/Terminal/Terminal.sol";
 import "./interfaces/UserInfo/UserInfo.sol";
+import "./TezosSendContract.sol";
 
 
-contract TezosContract is Debot {
+contract TezosContract is TezosSendContract, Debot {
     bytes m_icon;
     uint256 m_pubkey; //my Everscale pubkey
     string tezos_address; //Tezos address
@@ -20,8 +21,6 @@ contract TezosContract is Debot {
     string tezos_private_key; //Tezos private key
 
     mapping(uint256 => string) default_tezos_address;
-
-    string constant DOMAIN = "https://rpc.hangzhounet.teztnets.xyz/"; //set test or main Tezos RPC domain
 
 	modifier checkPubkey {
 		// Check that message public key is set
@@ -63,7 +62,7 @@ contract TezosContract is Debot {
         if (tezos_address != "") {
             Terminal.print(0, format("Tezos address is {}. Reset it?", tezos_address));
         }
-        
+
         Terminal.input(tvm.functionId(setTezosAddress), "Enter Tezos address", false);
     }
 
@@ -71,12 +70,12 @@ contract TezosContract is Debot {
         getTezosAddress();
 
         if (tezos_address == "") {
-            Terminal.input(tvm.functionId(setTezosAddress), "Firstly enter Tezos address", false);
+            Terminal.input(tvm.functionId(setTezosAddress), "Enter Tezos address first", false);
         }
         else {
             Terminal.print(0, format("Checking Tezos address {} ...", tezos_address));
             string[] headers;
-            string url = DOMAIN + "chains/main/blocks/head/context/contracts/";
+            string url = BASE_URL + "chains/main/blocks/head/context/contracts/";
             url += tezos_address; //url += "tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9";
             url += "/balance";
 
@@ -88,19 +87,12 @@ contract TezosContract is Debot {
         getTezosAddress();
 
         if (tezos_address == "") {
-            Terminal.input(tvm.functionId(setTezosAddress), "Firstly enter Tezos address", false);
+            Terminal.input(tvm.functionId(setTezosAddress), "Enter Tezos address first", false);
         }
         else {
             Terminal.print(0, format("Sending from Tezos address {} ...", tezos_address));
-            string[] headers;
-            string url = DOMAIN + "chains/main/blocks/head/context/contracts/";
-            url += tezos_address;
-            //url += "/balance"; //tz2VYjhQNT7DmKeYu3UgUgFjsToaNwEAJiC6
-            
-            // TODO: continue here
-            //headers.push("Content-Type: application/x-www-form-urlencoded");
-            //Network.get(tvm.functionId(getSendResponse), url, headers);
-        } 
+            sendXtz("tz1VmfstkNoW6qLWZNrYpeSBQbyu6zSJjouN", "tz1VmfstkNoW6qLWZNrYpeSBQbyu6zSJjouN", 1);
+        }
     }
 
     /*Temp deploy function*/
@@ -123,7 +115,7 @@ contract TezosContract is Debot {
         if (m_pubkey != 0 && default_tezos_address[m_pubkey] != "") {
             tezos_address = default_tezos_address[m_pubkey];
         }
-        
+
     }
 
     function setTezosAddress(string value) public {
