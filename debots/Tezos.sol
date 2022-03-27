@@ -4,10 +4,8 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 
 import "./interfaces/Debot.sol";
-import "./interfaces/AddressInput/AddressInput.sol";
 import "./interfaces/Menu/Menu.sol";
 import "./interfaces/Network/Network.sol";
-import "./interfaces/QRCode/QRCode.sol";
 import "./interfaces/Terminal/Terminal.sol";
 import "./interfaces/UserInfo/UserInfo.sol";
 import "./TezosSendContract.sol";
@@ -52,7 +50,6 @@ contract TezosContract is TezosSendContract, Debot {
             MenuItem("Balance", "Check balance XTZ", tvm.functionId(menuBalance)),
             MenuItem("Send", "Send transaction to the address", tvm.functionId(menuSend)),
             MenuItem("Info", "Get Tezos address by default", tvm.functionId(getInfo))
-            //MenuItem("Setting", "Set Tezos address by default", tvm.functionId(menuSetting))
         ]);
     }
 
@@ -94,21 +91,6 @@ contract TezosContract is TezosSendContract, Debot {
             sendXtz("tz1VmfstkNoW6qLWZNrYpeSBQbyu6zSJjouN", "tz1VmfstkNoW6qLWZNrYpeSBQbyu6zSJjouN", 1);
         }
     }
-
-    /*Temp deploy function*/
-    /* function settingTezosAddress(string value) public {
-        //require(value != "", 102);
-        if (value.byteLength() == 36) { //correct Tezos address length
-
-            setTezosAddress(value);
-        }
-        else {
-            //Terminal.input(tvm.functionId(settingTezosAddress), "Please enter correct Tezos address", false);
-            Terminal.print(0, "Failed to save Tezos Address. Please input correct address");
-
-            mainMenu();
-        }
-    } */
 
     function getTezosAddress() public {
 
