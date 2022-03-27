@@ -48,8 +48,7 @@ contract TezosContract is TezosSendContract, Debot {
         Menu.select("Menu", "Select item", [
             MenuItem("Address", "Input Tezos address", tvm.functionId(menuAddress)),
             MenuItem("Balance", "Check balance XTZ", tvm.functionId(menuBalance)),
-            MenuItem("Send", "Send transaction to the address", tvm.functionId(menuSend)),
-            MenuItem("Info", "Get Tezos address by default", tvm.functionId(getInfo))
+            MenuItem("Send", "Send transaction to the address", tvm.functionId(menuSend))
         ]);
     }
 
@@ -112,17 +111,6 @@ contract TezosContract is TezosSendContract, Debot {
 
             Terminal.print(0, "Failed to save Tezos Address. Please input correct address");
         }
-
-        mainMenu();
-    }
-
-    /*Temp function*/
-    function getInfo() public {
-
-        Terminal.print(0, format("tvm.pubkey: {}", tvm.pubkey()));
-        Terminal.print(0, format("m_pubkey: {}", m_pubkey));
-        Terminal.print(0, format("tezos_address: {}", tezos_address));
-        Terminal.print(0, format("tezos_address_default: {}", default_tezos_address[m_pubkey]));
 
         mainMenu();
     }
