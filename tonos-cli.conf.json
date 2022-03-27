@@ -19,16 +19,16 @@
     "local_run": false,
     "async_call": false,
     "endpoints": [
-      "http://0.0.0.0:8080/",
-      "http://127.0.0.1:8080/",
-      "http://localhost:8080/"
+      "http://0.0.0.0:80/",
+      "http://127.0.0.1:80/",
+      "http://localhost:80/"
     ]
   },
   "endpoints_map": {
     "http://127.0.0.1/": [
-      "http://0.0.0.0:8080/",
-      "http://127.0.0.1:8080/",
-      "http://localhost:8080/"
+      "http://0.0.0.0:80/",
+      "http://127.0.0.1:80/",
+      "http://localhost:80/"
     ],
     "main.ton.dev": [
       "https://main2.ton.dev",
